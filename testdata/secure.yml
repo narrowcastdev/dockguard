@@ -1,0 +1,25 @@
+services:
+  redis:
+    image: redis:7-alpine
+    user: "999:999"
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [SETUID, SETGID]
+    security_opt: [no-new-privileges]
+    ports:
+      - "127.0.0.1:6379:6379"
+    networks: [backend]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+          cpus: "0.5"
+
+networks:
+  backend:
+    driver: bridge

@@ -37,6 +37,11 @@ func run() int {
 		fmt.Fprintf(os.Stderr, "Usage: dockguard [flags] <docker-compose.yml>\n\nFlags:\n")
 		flag.PrintDefaults()
 	}
+
+	// Rearrange os.Args so flags can appear after the positional arg.
+	// e.g. "dockguard file.yml --fix" works the same as "dockguard --fix file.yml"
+	reorderArgs()
+
 	flag.Parse()
 
 	if flag.NArg() < 1 {
@@ -117,4 +122,34 @@ func filterBySeverity(findings []rule.Finding, min rule.Severity) []rule.Finding
 		}
 	}
 	return result
+}
+
+// reorderArgs moves flags after positional arguments to before them,
+// so "dockguard file.yml --fix" works like "dockguard --fix file.yml".
+func reorderArgs() {
+	args := os.Args[1:]
+	var flags, positional []string
+	for i := 0; i < len(args); i++ {
+		arg := args[i]
+		if arg == "--" {
+			positional = append(positional, args[i+1:]...)
+			break
+		}
+		if len(arg) > 0 && arg[0] == '-' {
+			flags = append(flags, arg)
+			// If this flag takes a value (not a boolean), grab the next arg too.
+			// Check for flags that take values: -o, -severity, --severity, --o
+			name := arg
+			for len(name) > 0 && name[0] == '-' {
+				name = name[1:]
+			}
+			if (name == "o" || name == "severity") && i+1 < len(args) {
+				i++
+				flags = append(flags, args[i])
+			}
+			continue
+		}
+		positional = append(positional, arg)
+	}
+	os.Args = append([]string{os.Args[0]}, append(flags, positional...)...)
 }
