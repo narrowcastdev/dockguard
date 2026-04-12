@@ -1,5 +1,5 @@
 # Binaries
-dockguard
+/dockguard
 *.exe
 *.exe~
 *.dll
