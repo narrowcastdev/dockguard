@@ -36,6 +36,20 @@ type Service struct {
 	DependsOn   any               `yaml:"depends_on,omitempty"`
 }
 
+// PrepareForMarshal syncs the Environment map back into RawEnv so that
+// yaml.Marshal produces the correct environment output.
+func (f *File) PrepareForMarshal() {
+	for _, svc := range f.Services {
+		if len(svc.Environment) > 0 {
+			env := make(map[string]any, len(svc.Environment))
+			for k, v := range svc.Environment {
+				env[k] = v
+			}
+			svc.RawEnv = env
+		}
+	}
+}
+
 // Healthcheck represents a service healthcheck configuration.
 type Healthcheck struct {
 	Test     []string `yaml:"test,omitempty"`
