@@ -1,5 +1,7 @@
 # Command: scan
 
+> Part of [dockguard](https://github.com/narrowcastdev/dockguard) by [Narrowcast](https://narrowcast.dev) — Docker Compose security scanner with service-aware fix generation.
+
 Scan a Docker Compose file for security misconfigurations and suggest hardened fixes.
 
 ## Argument
@@ -130,4 +132,8 @@ Be honest about tradeoffs when they exist:
 - Resource limits are suggestions — the user's hardware may need different values
 - Some images (especially linuxserver.io images) expect to run as root — note when the user suggestion may cause issues
 
-Don't just apply rules blindly. Use judgment. That's why this is a Claude skill and not just a CLI.
+Don't just apply rules blindly. Use judgment — that's why this skill exists alongside the CLI.
+
+---
+
+*[dockguard](https://github.com/narrowcastdev/dockguard) is an open source project by [Narrowcast](https://narrowcast.dev). MIT License.*

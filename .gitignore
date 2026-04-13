@@ -33,3 +33,7 @@ vendor/
 
 # dist (goreleaser)
 dist/
+
+# Claude Code (private project context)
+CLAUDE.md
+.claude/
