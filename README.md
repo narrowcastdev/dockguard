@@ -45,6 +45,12 @@ tar xzf dockguard_linux_amd64.tar.gz
 sudo mv dockguard /usr/local/bin/
 ```
 
+**Docker:**
+
+```bash
+docker run --rm -v $(pwd):/workspace narrowcastdev/dockguard /workspace/docker-compose.yml
+```
+
 **Go install:**
 
 ```bash
