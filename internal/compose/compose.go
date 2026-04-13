@@ -22,7 +22,8 @@ type Service struct {
 	Ports       []string          `yaml:"ports,omitempty"`
 	Environment map[string]string `yaml:"-"`
 	RawEnv      any               `yaml:"environment,omitempty"`
-	Networks    []string          `yaml:"networks,omitempty"`
+	Networks    []string          `yaml:"-"`
+	RawNetworks any               `yaml:"networks,omitempty"`
 	CapDrop     []string          `yaml:"cap_drop,omitempty"`
 	CapAdd      []string          `yaml:"cap_add,omitempty"`
 	Privileged  bool              `yaml:"privileged,omitempty"`
@@ -36,8 +37,8 @@ type Service struct {
 	DependsOn   any               `yaml:"depends_on,omitempty"`
 }
 
-// PrepareForMarshal syncs the Environment map back into RawEnv so that
-// yaml.Marshal produces the correct environment output.
+// PrepareForMarshal syncs computed fields back into their raw counterparts
+// so that yaml.Marshal produces the correct output.
 func (f *File) PrepareForMarshal() {
 	for _, svc := range f.Services {
 		if len(svc.Environment) > 0 {
@@ -47,12 +48,20 @@ func (f *File) PrepareForMarshal() {
 			}
 			svc.RawEnv = env
 		}
+		if len(svc.Networks) > 0 {
+			svc.RawNetworks = svc.Networks
+		}
+		if svc.Healthcheck != nil && len(svc.Healthcheck.Test) > 0 {
+			svc.Healthcheck.RawTest = svc.Healthcheck.Test
+		}
 	}
 }
 
 // Healthcheck represents a service healthcheck configuration.
 type Healthcheck struct {
-	Test     []string `yaml:"test,omitempty"`
+	Test     []string `yaml:"-"`
+	RawTest  any      `yaml:"test,omitempty"`
+	Disable  bool     `yaml:"disable,omitempty"`
 	Interval string   `yaml:"interval,omitempty"`
 	Timeout  string   `yaml:"timeout,omitempty"`
 	Retries  int      `yaml:"retries,omitempty"`
@@ -108,9 +117,13 @@ func Parse(data []byte) (*File, error) {
 		return nil, fmt.Errorf("not a Docker Compose file: no services defined")
 	}
 
-	// Normalize environment from RawEnv (handles both map and list formats).
+	// Normalize raw fields that support multiple YAML representations.
 	for _, svc := range f.Services {
 		svc.Environment = normalizeEnvironment(svc.RawEnv)
+		svc.Networks = normalizeNetworks(svc.RawNetworks)
+		if svc.Healthcheck != nil {
+			svc.Healthcheck.Test = normalizeHealthcheckTest(svc.Healthcheck.RawTest)
+		}
 	}
 
 	return &f, nil
@@ -149,6 +162,62 @@ func normalizeEnvironment(raw any) map[string]string {
 			}
 		}
 		return env
+	}
+	return nil
+}
+
+// normalizeHealthcheckTest converts the raw test value into a []string.
+// Docker Compose supports both string and list forms:
+//   - string: wrapped as ["CMD-SHELL", "<string>"] (matches Docker behavior)
+//   - list: passed through as-is
+func normalizeHealthcheckTest(raw any) []string {
+	if raw == nil {
+		return nil
+	}
+
+	switch v := raw.(type) {
+	case string:
+		return []string{"CMD-SHELL", v}
+	case []any:
+		result := make([]string, 0, len(v))
+		for _, item := range v {
+			s, ok := item.(string)
+			if !ok {
+				continue
+			}
+			result = append(result, s)
+		}
+		return result
+	}
+	return nil
+}
+
+// normalizeNetworks converts the raw networks value into a []string of names.
+// Docker Compose supports both list and map forms:
+//   - list: ["frontend", "backend"] — passed through
+//   - map: {wg: {ipv4_address: ...}} — extract keys
+func normalizeNetworks(raw any) []string {
+	if raw == nil {
+		return nil
+	}
+
+	switch v := raw.(type) {
+	case []any:
+		result := make([]string, 0, len(v))
+		for _, item := range v {
+			s, ok := item.(string)
+			if !ok {
+				continue
+			}
+			result = append(result, s)
+		}
+		return result
+	case map[string]any:
+		result := make([]string, 0, len(v))
+		for name := range v {
+			result = append(result, name)
+		}
+		return result
 	}
 	return nil
 }
