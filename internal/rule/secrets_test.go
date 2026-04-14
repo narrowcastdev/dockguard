@@ -40,7 +40,7 @@ func TestPlaintextSecretsEnvRef(t *testing.T) {
 				Image: "postgres",
 				Environment: map[string]string{
 					"POSTGRES_PASSWORD": "${DB_PASSWORD}",
-					"API_TOKEN":        "$MY_TOKEN",
+					"API_TOKEN":         "$MY_TOKEN",
 				},
 			},
 		},

@@ -20,7 +20,7 @@ var catalog = map[string]*ImageProfile{
 		Capabilities: []string{"CHOWN", "SETUID", "SETGID"},
 		User:         "999:999",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"},
+			Test:     []string{"CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"},
 			Interval: "10s", Timeout: "5s", Retries: 5,
 		},
 		MemoryLimit: "512m", CPULimit: "1.0",
@@ -29,7 +29,7 @@ var catalog = map[string]*ImageProfile{
 		Capabilities: []string{"SETUID", "SETGID"},
 		User:         "999:999",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD", "redis-cli", "ping"},
+			Test:     []string{"CMD", "redis-cli", "ping"},
 			Interval: "10s", Timeout: "5s", Retries: 5,
 		},
 		MemoryLimit: "256m", CPULimit: "0.5",
@@ -38,7 +38,7 @@ var catalog = map[string]*ImageProfile{
 		Capabilities: []string{"CHOWN", "SETUID", "SETGID"},
 		User:         "999:999",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "mysqladmin ping -h localhost"},
+			Test:     []string{"CMD-SHELL", "mysqladmin ping -h localhost"},
 			Interval: "10s", Timeout: "5s", Retries: 5,
 		},
 		MemoryLimit: "512m", CPULimit: "1.0",
@@ -47,7 +47,7 @@ var catalog = map[string]*ImageProfile{
 		Capabilities: []string{"CHOWN", "SETUID", "SETGID"},
 		User:         "999:999",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "mysqladmin ping -h localhost"},
+			Test:     []string{"CMD-SHELL", "mysqladmin ping -h localhost"},
 			Interval: "10s", Timeout: "5s", Retries: 5,
 		},
 		MemoryLimit: "512m", CPULimit: "1.0",
@@ -65,7 +65,7 @@ var catalog = map[string]*ImageProfile{
 		Capabilities: []string{"NET_BIND_SERVICE"},
 		User:         "101:101",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost/ || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost/ || exit 1"},
 			Interval: "10s", Timeout: "5s", Retries: 3,
 		},
 		MemoryLimit: "128m", CPULimit: "0.5",
@@ -74,7 +74,7 @@ var catalog = map[string]*ImageProfile{
 		Capabilities: []string{"NET_BIND_SERVICE"},
 		User:         "65534:65534",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD", "traefik", "healthcheck"},
+			Test:     []string{"CMD", "traefik", "healthcheck"},
 			Interval: "10s", Timeout: "5s", Retries: 3,
 		},
 		MemoryLimit: "256m", CPULimit: "0.5",
@@ -83,7 +83,7 @@ var catalog = map[string]*ImageProfile{
 		Capabilities: []string{"NET_BIND_SERVICE"},
 		User:         "1000:1000",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD", "caddy", "version"},
+			Test:     []string{"CMD", "caddy", "version"},
 			Interval: "10s", Timeout: "5s", Retries: 3,
 		},
 		MemoryLimit: "128m", CPULimit: "0.5",
@@ -91,7 +91,7 @@ var catalog = map[string]*ImageProfile{
 	"jellyfin": {
 		User: "1000:1000",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost:8096/health || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost:8096/health || exit 1"},
 			Interval: "30s", Timeout: "10s", Retries: 3,
 		},
 		MemoryLimit: "1g", CPULimit: "2.0",
@@ -99,7 +99,7 @@ var catalog = map[string]*ImageProfile{
 	"immich-server": {
 		User: "1000:1000",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost:2283/api/server/ping || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost:2283/api/server/ping || exit 1"},
 			Interval: "30s", Timeout: "10s", Retries: 3,
 		},
 		MemoryLimit: "1g", CPULimit: "2.0",
@@ -107,7 +107,7 @@ var catalog = map[string]*ImageProfile{
 	"nextcloud": {
 		User: "33:33",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost/status.php || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost/status.php || exit 1"},
 			Interval: "30s", Timeout: "10s", Retries: 3,
 		},
 		MemoryLimit: "512m", CPULimit: "1.0",
@@ -115,7 +115,7 @@ var catalog = map[string]*ImageProfile{
 	"vaultwarden": {
 		User: "1000:1000",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost/alive || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost/alive || exit 1"},
 			Interval: "30s", Timeout: "10s", Retries: 3,
 		},
 		MemoryLimit: "256m", CPULimit: "0.5",
@@ -123,7 +123,7 @@ var catalog = map[string]*ImageProfile{
 	"sonarr": {
 		User: "1000:1000",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost:8989/ping || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost:8989/ping || exit 1"},
 			Interval: "30s", Timeout: "10s", Retries: 3,
 		},
 		MemoryLimit: "512m", CPULimit: "0.5",
@@ -131,7 +131,7 @@ var catalog = map[string]*ImageProfile{
 	"radarr": {
 		User: "1000:1000",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost:7878/ping || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost:7878/ping || exit 1"},
 			Interval: "30s", Timeout: "10s", Retries: 3,
 		},
 		MemoryLimit: "512m", CPULimit: "0.5",
@@ -139,7 +139,7 @@ var catalog = map[string]*ImageProfile{
 	"prowlarr": {
 		User: "1000:1000",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost:9696/ping || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost:9696/ping || exit 1"},
 			Interval: "30s", Timeout: "10s", Retries: 3,
 		},
 		MemoryLimit: "256m", CPULimit: "0.5",
@@ -147,7 +147,7 @@ var catalog = map[string]*ImageProfile{
 	"grafana": {
 		User: "472:472",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"},
 			Interval: "10s", Timeout: "5s", Retries: 3,
 		},
 		MemoryLimit: "256m", CPULimit: "0.5",
@@ -155,7 +155,7 @@ var catalog = map[string]*ImageProfile{
 	"prometheus": {
 		User: "65534:65534",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "wget --spider -q http://localhost:9090/-/healthy"},
+			Test:     []string{"CMD-SHELL", "wget --spider -q http://localhost:9090/-/healthy"},
 			Interval: "10s", Timeout: "5s", Retries: 3,
 		},
 		MemoryLimit: "512m", CPULimit: "0.5",
@@ -164,7 +164,7 @@ var catalog = map[string]*ImageProfile{
 		Capabilities: []string{"NET_BIND_SERVICE", "CHOWN"},
 		User:         "999:999",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "dig +short @127.0.0.1 pi.hole || exit 1"},
+			Test:     []string{"CMD-SHELL", "dig +short @127.0.0.1 pi.hole || exit 1"},
 			Interval: "30s", Timeout: "10s", Retries: 3,
 		},
 		MemoryLimit: "256m", CPULimit: "0.5",
@@ -172,7 +172,7 @@ var catalog = map[string]*ImageProfile{
 	"homeassistant": {
 		User: "1000:1000",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost:8123/api/ || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost:8123/api/ || exit 1"},
 			Interval: "30s", Timeout: "10s", Retries: 3,
 		},
 		MemoryLimit: "512m", CPULimit: "1.0",
@@ -181,7 +181,7 @@ var catalog = map[string]*ImageProfile{
 		Capabilities: []string{"NET_BIND_SERVICE"},
 		User:         "1000:1000",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "wget --spider -q http://localhost:3000/"},
+			Test:     []string{"CMD-SHELL", "wget --spider -q http://localhost:3000/"},
 			Interval: "10s", Timeout: "5s", Retries: 3,
 		},
 		MemoryLimit: "256m", CPULimit: "0.5",
@@ -189,7 +189,7 @@ var catalog = map[string]*ImageProfile{
 	"plex": {
 		User: "1000:1000",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost:32400/identity || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost:32400/identity || exit 1"},
 			Interval: "30s", Timeout: "10s", Retries: 3,
 		},
 		MemoryLimit: "1g", CPULimit: "2.0",
@@ -197,7 +197,7 @@ var catalog = map[string]*ImageProfile{
 	"portainer": {
 		User: "1000:1000",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost:9000/api/status || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost:9000/api/status || exit 1"},
 			Interval: "10s", Timeout: "5s", Retries: 3,
 		},
 		MemoryLimit: "256m", CPULimit: "0.5",
@@ -205,7 +205,7 @@ var catalog = map[string]*ImageProfile{
 	"uptime-kuma": {
 		User: "1000:1000",
 		Healthcheck: &compose.Healthcheck{
-			Test: []string{"CMD-SHELL", "curl -f http://localhost:3001/ || exit 1"},
+			Test:     []string{"CMD-SHELL", "curl -f http://localhost:3001/ || exit 1"},
 			Interval: "30s", Timeout: "10s", Retries: 3,
 		},
 		MemoryLimit: "256m", CPULimit: "0.5",
