@@ -8,6 +8,8 @@
 
 Built for self-hosters and homelab operators who know their setup is insecure but lack the time to audit and fix it manually.
 
+📖 **[Docker Compose Security: The Complete Guide](https://narrowcast.dev/blog/docker-compose-security-guide/)** — learn the 9 most common misconfigurations and how to fix each one.
+
 ## Quick Start
 
 ```bash
