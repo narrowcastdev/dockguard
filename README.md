@@ -4,11 +4,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Go Report Card](https://goreportcard.com/badge/github.com/narrowcastdev/dockguard)](https://goreportcard.com/report/github.com/narrowcastdev/dockguard)
 
-Docker Compose security scanner with service-aware fix generation.
+**Docker Compose security scanner** — scans your `docker-compose.yml` for misconfigurations (privileged mode, exposed ports, plaintext secrets, missing capability restrictions) and generates a hardened version. Free, open source, single binary.
 
-Scans your `docker-compose.yml` for 12 common security misconfigurations and generates a hardened version — no manual YAML editing required.
-
-**Built for self-hosters and homelab operators** who know their setup is insecure but lack the time to audit and fix it manually.
+Built for self-hosters and homelab operators who know their setup is insecure but lack the time to audit and fix it manually.
 
 ## Quick Start
 
